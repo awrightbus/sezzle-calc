@@ -11,8 +11,7 @@ function App() {
   const [input, setInput] = useState('');
   //state that keeps track of the previous button that was clicked
   const [previousNumber, setPreviousNumber] = useState('');
-  //Button that keeps track of the new current number
-  const [currentNumber, setCurrentNumber] = useState('');
+
   //state that keep tracks of the operators clicked
   const [operator, setOperator] = useState('');
 
@@ -47,8 +46,21 @@ function App() {
   const add = () => {
 
     const prevState = input
+    setPreviousNumber(prevState)
     setInput('');
     setOperator('plus')
+  }
+
+  //this method handles the calculations after the operator has been determined
+  const calculation = () => {
+    
+    const curNum = input
+    
+    if(operator === 'plus'){
+      setInput(parseInt(previousNumber) + parseInt(curNum))
+      
+    }
+    
   }
 
   return (
@@ -83,7 +95,7 @@ function App() {
               <div className='row'>
               <Button handleClick={addDecimal} >.</Button>
               <Button handleClick={addZeroToInput}>0</Button>
-              <Button>=</Button>
+              <Button handleClick={calculation}>=</Button>
               <Button>-</Button>
           </div>
           <div className='row'>
