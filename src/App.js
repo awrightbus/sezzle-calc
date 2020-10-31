@@ -51,14 +51,43 @@ function App() {
     setOperator('plus')
   }
 
+  //subtraction logic
+  const subtract = () => {
+    const prevState = input
+    setPreviousNumber(prevState)
+    setInput('');
+    setOperator('minus')
+  }
+  //multiplication logic
+  const multiply = () => {
+    const prevState = input
+    setPreviousNumber(prevState)
+    setInput('');
+    setOperator('multiply')
+  }
+
+  //division logic
+  const divide = () => {
+    const prevState = input
+    setPreviousNumber(prevState)
+    setInput('');
+    setOperator('divide')
+  }
+
   //this method handles the calculations after the operator has been determined
   const calculation = () => {
     
     const curNum = input
     
     if(operator === 'plus'){
-      setInput(parseInt(previousNumber) + parseInt(curNum))
+      setInput(parseFloat(previousNumber) + parseFloat(curNum))
       
+    }else if (operator === 'minus'){
+      setInput(parseFloat(previousNumber) - parseFloat(curNum))
+    }else if(operator ==='multiply'){
+      setInput(parseFloat(previousNumber) * parseFloat(curNum))
+    }else if(operator ==='divide'){
+      setInput(parseFloat(previousNumber) / parseFloat(curNum))
     }
     
   }
@@ -76,14 +105,14 @@ function App() {
               <Button handleClick={addToInput}>7</Button>
               <Button handleClick={addToInput}>8</Button>
               <Button handleClick={addToInput}>9</Button>
-              <Button handleClick={addToInput}>/</Button>
+              <Button handleClick={divide}>/</Button>
           </div>
 
           <div className='row'>
               <Button handleClick={addToInput}>4</Button>
               <Button handleClick={addToInput}>5</Button>
               <Button handleClick={addToInput}>6</Button>
-              <Button handleClick={addToInput}>*</Button>
+              <Button handleClick={multiply}>*</Button>
           </div>
 
           <div className='row'>
@@ -96,7 +125,7 @@ function App() {
               <Button handleClick={addDecimal} >.</Button>
               <Button handleClick={addZeroToInput}>0</Button>
               <Button handleClick={calculation}>=</Button>
-              <Button>-</Button>
+              <Button handleClick={subtract}>-</Button>
           </div>
           <div className='row'>
                <Clear handleClear={clearInput}>Clear</Clear>
