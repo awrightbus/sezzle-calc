@@ -1,3 +1,19 @@
 .feed{
     margin-left: 40px;
+    border: 1px solid #888;
+    width: 500px;
+    text-align: center;
+    background-color: #181818;
+    color: white;
 }
+
+.result-header{
+    border-bottom: solid 1px #888;
+    background-color: #202020;
+}
+
+.result{
+    color: rgb(195, 46, 46);
+    font-weight: bold;
+}
+

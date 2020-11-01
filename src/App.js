@@ -16,6 +16,9 @@ function App() {
   //state that keep tracks of the operators clicked
   const [operator, setOperator] = useState('');
 
+  //creates the state for the results that i want to be updated live
+  const [resultList, setResultList] = useState([])
+
   //val is the information passed from the button children,
   //this function is used to add the button clicks to the input box
   const addToInput = (val) => {
@@ -75,35 +78,55 @@ function App() {
     setOperator('divide')
   }
 
+  //this adds the results i get into an array that i hope to display as a live feed
+  const addResult = (result) => {
+    const prevState = resultList
+
+    if(resultList.length === 10){
+        resultList.splice(-1)
+        setResultList([result,...prevState])
+      
+    }else{
+      setResultList([result,...prevState])
+      
+    
+    }
+ }
+
+
   //this method handles the calculations after the operator has been determined
   const calculation = () => {
     
     const curNum = input
     
     if(operator === 'plus'){
-      setInput(parseFloat(previousNumber) + parseFloat(curNum))
+      const value = (parseFloat(previousNumber) + parseFloat(curNum))
+      setInput(value)
+      return addResult(value)
       
     }if (operator === 'minus'){
-      setInput(parseFloat(previousNumber) - parseFloat(curNum))
+      const value = (parseFloat(previousNumber) - parseFloat(curNum))
+      setInput(value)
+      return addResult(value)
   
       
     }if(operator ==='multiply'){
-      setInput(parseFloat(previousNumber) * parseFloat(curNum))
+      const value = (parseFloat(previousNumber) * parseFloat(curNum))
+      setInput(value)
+      return addResult(value)
       
     }if(operator ==='divide'){
-      setInput(parseFloat(previousNumber) / parseFloat(curNum))  
+      const value = (parseFloat(previousNumber) / parseFloat(curNum))
+      setInput(value)
+      return addResult(value) 
     }
     
   }
   
  
-
-  //this is where i want to store results to be displayed in the feed
-  const addResult = () => {
-     const newResult = input;
-     console.log(newResult,'result')
-  }
-
+console.log(resultList,'end of app function')
+ 
+ 
   
   return (
     <div className="app">
@@ -146,7 +169,7 @@ function App() {
           
         </div>
         <div>
-          <Feed />
+          <Feed results={resultList}/>
         </div>
         
     </div>
