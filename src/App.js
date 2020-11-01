@@ -3,6 +3,7 @@ import React,{useState} from 'react';
 import Button from './comps/Button'
 import Input from './comps/Input'
 import Clear from './comps/Clear'
+import Feed from './comps/Feed'
 
 
 function App() {
@@ -82,16 +83,28 @@ function App() {
     if(operator === 'plus'){
       setInput(parseFloat(previousNumber) + parseFloat(curNum))
       
-    }else if (operator === 'minus'){
+    }if (operator === 'minus'){
       setInput(parseFloat(previousNumber) - parseFloat(curNum))
-    }else if(operator ==='multiply'){
+  
+      
+    }if(operator ==='multiply'){
       setInput(parseFloat(previousNumber) * parseFloat(curNum))
-    }else if(operator ==='divide'){
-      setInput(parseFloat(previousNumber) / parseFloat(curNum))
+      
+    }if(operator ==='divide'){
+      setInput(parseFloat(previousNumber) / parseFloat(curNum))  
     }
     
   }
+  
+ 
 
+  //this is where i want to store results to be displayed in the feed
+  const addResult = () => {
+     const newResult = input;
+     console.log(newResult,'result')
+  }
+
+  
   return (
     <div className="app">
         <div className='calc-wrapper'>
@@ -130,8 +143,12 @@ function App() {
           <div className='row'>
                <Clear handleClear={clearInput}>Clear</Clear>
           </div>
-
+          
         </div>
+        <div>
+          <Feed />
+        </div>
+        
     </div>
   );
 }
