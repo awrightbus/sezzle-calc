@@ -16,7 +16,7 @@ function App() {
   //state that keep tracks of the operators clicked
   const [operator, setOperator] = useState('');
 
-  //creates the state for the result list
+  //creates the state for the results that i want to be updated live
   const [resultList, setResultList] = useState([])
 
   //val is the information passed from the button children,
@@ -78,10 +78,20 @@ function App() {
     setOperator('divide')
   }
 
-
+  //this adds the results i get into an array that i hope to display as a live feed
   const addResult = (result) => {
+    const prevState = resultList
+
+    if(resultList.length === 10){
+      setResultList([resultList].splice(resultList.length -1))
+      console.log(resultList)
+    }else{
+      setResultList([result,...prevState])
+      console.log(resultList)
     
+    }
  }
+
 
   //this method handles the calculations after the operator has been determined
   const calculation = () => {
@@ -158,7 +168,7 @@ function App() {
           
         </div>
         <div>
-          <Feed handleresults={input}/>
+          <Feed results={resultList}/>
         </div>
         
     </div>
