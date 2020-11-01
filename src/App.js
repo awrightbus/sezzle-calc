@@ -83,11 +83,12 @@ function App() {
     const prevState = resultList
 
     if(resultList.length === 10){
-      setResultList([resultList].splice(resultList.length -1))
-      console.log(resultList)
+        resultList.splice(-1)
+        setResultList([result,...prevState])
+      
     }else{
       setResultList([result,...prevState])
-      console.log(resultList)
+      
     
     }
  }
@@ -123,7 +124,7 @@ function App() {
   }
   
  
-
+console.log(resultList,'end of app function')
  
  
   
