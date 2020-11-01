@@ -8,7 +8,8 @@ function Button(props) {
     }
 
     return (
-        <div className={`button ${isOperator(props.children) ? "" : "operator"}`} onClick={() => {props.handleClick(props.children)}}>
+        <div className={`button ${isOperator(props.children) ? "" : "operator"}`} onClick={() => {props.handleClick(props.children)}}
+        >
             {props.children}
         </div>
     )
