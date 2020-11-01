@@ -1,10 +1,23 @@
-import React from 'react'
+import React,{useState} from 'react'
 import './Feed.css'
 
 function Feed(props) {
+
+    
+    
+
+     //this is where i want to store results to be displayed in the feed
+  
+
+    
     return (
         <div className='feed'>
-            <h1>Test</h1>
+            <div>
+                <h1>Top 10 Results</h1>
+            </div>
+            <div className='results'>
+
+            </div>
 
         </div>
     )

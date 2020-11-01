@@ -16,6 +16,9 @@ function App() {
   //state that keep tracks of the operators clicked
   const [operator, setOperator] = useState('');
 
+  //creates the state for the result list
+  const [resultList, setResultList] = useState([])
+
   //val is the information passed from the button children,
   //this function is used to add the button clicks to the input box
   const addToInput = (val) => {
@@ -75,35 +78,44 @@ function App() {
     setOperator('divide')
   }
 
+
+  const addResult = (result) => {
+    
+ }
+
   //this method handles the calculations after the operator has been determined
   const calculation = () => {
     
     const curNum = input
     
     if(operator === 'plus'){
-      setInput(parseFloat(previousNumber) + parseFloat(curNum))
+      const value = (parseFloat(previousNumber) + parseFloat(curNum))
+      setInput(value)
+      return addResult(value)
       
     }if (operator === 'minus'){
-      setInput(parseFloat(previousNumber) - parseFloat(curNum))
+      const value = (parseFloat(previousNumber) - parseFloat(curNum))
+      setInput(value)
+      return addResult(value)
   
       
     }if(operator ==='multiply'){
-      setInput(parseFloat(previousNumber) * parseFloat(curNum))
+      const value = (parseFloat(previousNumber) * parseFloat(curNum))
+      setInput(value)
+      return addResult(value)
       
     }if(operator ==='divide'){
-      setInput(parseFloat(previousNumber) / parseFloat(curNum))  
+      const value = (parseFloat(previousNumber) / parseFloat(curNum))
+      setInput(value)
+      return addResult(value) 
     }
     
   }
   
  
 
-  //this is where i want to store results to be displayed in the feed
-  const addResult = () => {
-     const newResult = input;
-     console.log(newResult,'result')
-  }
-
+ 
+ 
   
   return (
     <div className="app">
@@ -146,7 +158,7 @@ function App() {
           
         </div>
         <div>
-          <Feed />
+          <Feed handleresults={input}/>
         </div>
         
     </div>
