@@ -1,13 +1,15 @@
 import './App.css';
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import Button from './comps/Button'
 import Input from './comps/Input'
 import Clear from './comps/Clear'
 import Feed from './comps/Feed'
+import {uploadCalculations, getCalculations} from './firebase'
 
 
 function App() {
-
+    
+  
   //state that tracks user button clicks
   const [input, setInput] = useState('');
   //state that keeps track of the previous button that was clicked
@@ -17,12 +19,22 @@ function App() {
   const [operator, setOperator] = useState('');
 
   //creates the state for the results that i want to be updated live
-  const [resultList, setResultList] = useState([])
+  const [resultList, setResultList] = useState([]);
+
+  //stores epxression as a string
+  const [addExpression, setAddExpression] = useState('');
+
+//controlling the database from the initial rendering of the app
+ 
+
+
+
 
   //val is the information passed from the button children,
   //this function is used to add the button clicks to the input box
   const addToInput = (val) => {
     setInput(input + val)
+    setAddExpression(addExpression + val)
   }
 
   //checks to make sure zero is not the first "input" clicked 
@@ -52,7 +64,8 @@ function App() {
     const prevState = input
     setPreviousNumber(prevState)
     setInput('');
-    setOperator('plus')
+    setOperator('+')
+    setAddExpression(addExpression + '+')
   }
 
   //subtraction logic
@@ -60,14 +73,16 @@ function App() {
     const prevState = input
     setPreviousNumber(prevState)
     setInput('');
-    setOperator('minus')
+    setOperator('-')
+    setAddExpression(addExpression + '-')
   }
   //multiplication logic
   const multiply = () => {
     const prevState = input
     setPreviousNumber(prevState)
     setInput('');
-    setOperator('multiply')
+    setOperator('*')
+    setAddExpression(addExpression + '*')
   }
 
   //division logic
@@ -75,8 +90,11 @@ function App() {
     const prevState = input
     setPreviousNumber(prevState)
     setInput('');
-    setOperator('divide')
+    setOperator('/')
+    setAddExpression(addExpression + '/')
   }
+
+
 
   //this adds the results i get into an array that i hope to display as a live feed
   const addResult = (result) => {
@@ -99,37 +117,44 @@ function App() {
     
     const curNum = input
     
-    if(operator === 'plus'){
+    
+    if(operator === '+'){
       const value = (parseFloat(previousNumber) + parseFloat(curNum))
       setInput(value)
+      setAddExpression(addExpression + `= ${value}`)
+      uploadCalculations(addExpression,value)
       return addResult(value)
       
-    }if (operator === 'minus'){
+    }if (operator === '-'){
       const value = (parseFloat(previousNumber) - parseFloat(curNum))
       setInput(value)
+      setAddExpression(addExpression + `= ${value}`)
       return addResult(value)
   
       
-    }if(operator ==='multiply'){
+    }if(operator ==='*'){
       const value = (parseFloat(previousNumber) * parseFloat(curNum))
       setInput(value)
+      setAddExpression(addExpression + `= ${value}`)
       return addResult(value)
       
-    }if(operator ==='divide'){
+    }if(operator ==='/'){
       const value = (parseFloat(previousNumber) / parseFloat(curNum))
       setInput(value)
+      setAddExpression(addExpression + `= ${value}`)
       return addResult(value) 
     }
     
   }
   
  
-console.log(resultList,'end of app function')
- 
+
+
  
   
   return (
     <div className="app">
+        
         <div className='calc-wrapper'>
           <div className='row'>
               {/* The input component displays its children, as the calulator result pad */}
@@ -168,8 +193,12 @@ console.log(resultList,'end of app function')
           </div>
           
         </div>
-        <div>
-          <Feed results={resultList}/>
+        <div>     
+              <Feed 
+              results={resultList}
+              expression ={addExpression}
+              />  
+          
         </div>
         
     </div>
@@ -177,3 +206,4 @@ console.log(resultList,'end of app function')
 }
 
 export default App;
+

@@ -1,8 +1,8 @@
 import React from 'react'
 import './Feed.css'
 
-function Feed(props) {
 
+function Feed({results,expression}) {
 
 
 
@@ -15,11 +15,11 @@ function Feed(props) {
             <div className='results'>
                 
                 
-                {props.results.map((result, i)=> 
+                {results.map((result, i,expression)=> 
                 {
                    return( 
                        <div key={i} className='result'>
-                        <p>{result}</p>
+                        <p>{results}</p>
                        </div>
                    )
                 })}
