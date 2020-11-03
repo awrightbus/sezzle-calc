@@ -1,209 +1,180 @@
-import './App.css';
-import React,{useState,useEffect} from 'react';
-import Button from './comps/Button'
-import Input from './comps/Input'
-import Clear from './comps/Clear'
-import Feed from './comps/Feed'
-import {uploadCalculations, getCalculations} from './firebase'
-
+import "./App.css";
+import React, { useState, useEffect } from "react";
+import Button from "./comps/Button";
+import Input from "./comps/Input";
+import Clear from "./comps/Clear";
+import Feed from "./comps/Feed";
+import { uploadCalculations, recieveCalculations, getMarker } from "./firebase";
 
 function App() {
-    
-  
   //state that tracks user button clicks
-  const [input, setInput] = useState('');
+  const [calcDisplay, setCalcDisplay] = useState("");
   //state that keeps track of the previous button that was clicked
-  const [previousNumber, setPreviousNumber] = useState('');
+  const [previousNumber, setPreviousNumber] = useState("");
 
   //state that keep tracks of the operators clicked
-  const [operator, setOperator] = useState('');
+  const [operator, setOperator] = useState("");
 
   //creates the state for the results that i want to be updated live
   const [resultList, setResultList] = useState([]);
 
-  //stores epxression as a string
-  const [addExpression, setAddExpression] = useState('');
+  //stores epxression as a string before they press =
+  const [addExpression, setAddExpression] = useState("");
 
-//controlling the database from the initial rendering of the app
- 
+  //controlling the database from the initial rendering of the app
 
+  useEffect(() => {
+    recieveCalculations();
 
+    // .then((snapshot) => {
+    //   const data = snapshot.docs.map((doc) => (doc.data().expression));
+    //   setResultList(data);
 
+    // });
+
+    const unsubscribe = recieveCalculations()
+      .orderBy("created", "desc")
+      .limit(10)
+      .onSnapshot((snap) => {
+        const data = snap.docs.map((doc) => {
+          return {
+            id: doc.id,
+            exp: doc.data().expression,
+          };
+        });
+        setResultList(data);
+      });
+
+    //remember to unsubscribe from your realtime listener on unmount or you will create a memory leak
+    return () => unsubscribe();
+  }, []);
 
   //val is the information passed from the button children,
   //this function is used to add the button clicks to the input box
-  const addToInput = (val) => {
-    setInput(input + val)
-    setAddExpression(addExpression + val)
-  }
+  const addToCalcDisplay = (val) => {
+    setCalcDisplay(calcDisplay + val);
+    setAddExpression(addExpression + val);
+  };
 
-  //checks to make sure zero is not the first "input" clicked 
+  //checks to make sure zero is not the first "input" clicked
   //so i did this by checking the state of the input and making sure its not empty
-  const addZeroToInput = val => {
-      if(input !== ''){
-        setInput(input + val)
-      }
-  }
+  const addZeroToCalcDisplay = (val) => {
+    if (calcDisplay !== "") {
+      setCalcDisplay(calcDisplay + val);
+      setAddExpression(addExpression + val);
+    }
+  };
 
   //add decimal function prevents more than one decimal, becamore more than one wouldnt be a number
-  const addDecimal = val => {
-    if(input.indexOf('.') === -1){
-      setInput(input + val)
+  const addDecimal = (val) => {
+    if (calcDisplay.indexOf(".") === -1) {
+      setCalcDisplay(calcDisplay + val);
     }
-  }
+  };
 
-  //add functionality for the clear button 
-  const clearInput = () => {
-    setInput('');
-  }
+  //add functionality for the clear button
+  const clearCalcDisplay = () => {
+    setCalcDisplay("");
+  };
 
   //logic for addition operations
   // set the current input as the previous number so we can have the first value
-  const add = () => {
-
-    const prevState = input
-    setPreviousNumber(prevState)
-    setInput('');
-    setOperator('+')
-    setAddExpression(addExpression + '+')
-  }
+  const add = (operation) => {
+    const prevState = calcDisplay;
+    createExpression(prevState, operation);
+  };
 
   //subtraction logic
-  const subtract = () => {
-    const prevState = input
-    setPreviousNumber(prevState)
-    setInput('');
-    setOperator('-')
-    setAddExpression(addExpression + '-')
-  }
+  const subtract = (operation) => {
+    const prevState = calcDisplay;
+    createExpression(prevState, operation);
+  };
   //multiplication logic
-  const multiply = () => {
-    const prevState = input
-    setPreviousNumber(prevState)
-    setInput('');
-    setOperator('*')
-    setAddExpression(addExpression + '*')
-  }
+  const multiply = (operation) => {
+    const prevState = calcDisplay;
+    createExpression(prevState, operation);
+  };
 
   //division logic
-  const divide = () => {
-    const prevState = input
-    setPreviousNumber(prevState)
-    setInput('');
-    setOperator('/')
-    setAddExpression(addExpression + '/')
-  }
+  const divide = (operation) => {
+    const prevState = calcDisplay;
+    createExpression(prevState, operation);
+  };
 
-
-
-  //this adds the results i get into an array that i hope to display as a live feed
-  const addResult = (result) => {
-    const prevState = resultList
-
-    if(resultList.length === 10){
-        resultList.splice(-1)
-        setResultList([result,...prevState])
-      
-    }else{
-      setResultList([result,...prevState])
-      
-    
-    }
- }
-
+  //operation logic
+  const createExpression = (prevState, operation) => {
+    setPreviousNumber(prevState);
+    setCalcDisplay("");
+    setOperator(operation);
+    setAddExpression(addExpression + operation);
+  };
 
   //this method handles the calculations after the operator has been determined
   const calculation = () => {
-    
-    const curNum = input
-    
-    
-    if(operator === '+'){
-      const value = (parseFloat(previousNumber) + parseFloat(curNum))
-      setInput(value)
-      setAddExpression(addExpression + `= ${value}`)
-      uploadCalculations(addExpression,value)
-      return addResult(value)
-      
-    }if (operator === '-'){
-      const value = (parseFloat(previousNumber) - parseFloat(curNum))
-      setInput(value)
-      setAddExpression(addExpression + `= ${value}`)
-      return addResult(value)
-  
-      
-    }if(operator ==='*'){
-      const value = (parseFloat(previousNumber) * parseFloat(curNum))
-      setInput(value)
-      setAddExpression(addExpression + `= ${value}`)
-      return addResult(value)
-      
-    }if(operator ==='/'){
-      const value = (parseFloat(previousNumber) / parseFloat(curNum))
-      setInput(value)
-      setAddExpression(addExpression + `= ${value}`)
-      return addResult(value) 
+    const curNum = calcDisplay;
+    let value;
+    if (operator === "+") {
+      value = parseFloat(previousNumber) + parseFloat(curNum);
     }
-    
-  }
-  
- 
+    if (operator === "-") {
+      value = parseFloat(previousNumber) - parseFloat(curNum);
+    }
+    if (operator === "*") {
+      value = parseFloat(previousNumber) * parseFloat(curNum);
+    }
+    if (operator === "/") {
+      value = parseFloat(previousNumber) / parseFloat(curNum);
+    }
+    setCalcDisplay(value);
+    setAddExpression(addExpression);
+    uploadCalculations(addExpression, value);
+    setAddExpression("");
+  };
 
-
- 
-  
   return (
     <div className="app">
-        
-        <div className='calc-wrapper'>
-          <div className='row'>
-              {/* The input component displays its children, as the calulator result pad */}
-              {/* So i pass the current state of the input to show users whats being clicked  */}
-              <Input>{input}</Input>
-          </div>
-          <div className='row'>
-              {/* Add input function just adds the val to the input state */}
-              <Button handleClick={addToInput}>7</Button>
-              <Button handleClick={addToInput}>8</Button>
-              <Button handleClick={addToInput}>9</Button>
-              <Button handleClick={divide}>/</Button>
-          </div>
-
-          <div className='row'>
-              <Button handleClick={addToInput}>4</Button>
-              <Button handleClick={addToInput}>5</Button>
-              <Button handleClick={addToInput}>6</Button>
-              <Button handleClick={multiply}>*</Button>
-          </div>
-
-          <div className='row'>
-              <Button handleClick={addToInput}>1</Button>
-              <Button handleClick={addToInput}>2</Button>
-              <Button handleClick={addToInput}>3</Button>
-              <Button handleClick={add}>+</Button>
-          </div>
-              <div className='row'>
-              <Button handleClick={addDecimal} >.</Button>
-              <Button handleClick={addZeroToInput}>0</Button>
-              <Button handleClick={calculation}>=</Button>
-              <Button handleClick={subtract}>-</Button>
-          </div>
-          <div className='row'>
-               <Clear handleClear={clearInput}>Clear</Clear>
-          </div>
-          
+      <div className="calc-wrapper">
+        <div className="row">
+          {/* The input component displays its children, as the calulator result pad */}
+          {/* So i pass the current state of the input to show users whats being clicked  */}
+          <Input>{calcDisplay}</Input>
         </div>
-        <div>     
-              <Feed 
-              results={resultList}
-              expression ={addExpression}
-              />  
-          
+        <div className="row">
+          {/* Add input function just adds the val to the input state */}
+          <Button handleClick={addToCalcDisplay}>7</Button>
+          <Button handleClick={addToCalcDisplay}>8</Button>
+          <Button handleClick={addToCalcDisplay}>9</Button>
+          <Button handleClick={divide}>/</Button>
         </div>
-        
+
+        <div className="row">
+          <Button handleClick={addToCalcDisplay}>4</Button>
+          <Button handleClick={addToCalcDisplay}>5</Button>
+          <Button handleClick={addToCalcDisplay}>6</Button>
+          <Button handleClick={multiply}>*</Button>
+        </div>
+
+        <div className="row">
+          <Button handleClick={addToCalcDisplay}>1</Button>
+          <Button handleClick={addToCalcDisplay}>2</Button>
+          <Button handleClick={addToCalcDisplay}>3</Button>
+          <Button handleClick={add}>+</Button>
+        </div>
+        <div className="row">
+          <Button handleClick={addDecimal}>.</Button>
+          <Button handleClick={addZeroToCalcDisplay}>0</Button>
+          <Button handleClick={calculation}>=</Button>
+          <Button handleClick={subtract}>-</Button>
+        </div>
+        <div className="row">
+          <Clear handleClear={clearCalcDisplay}>Clear</Clear>
+        </div>
+      </div>
+      <div>
+        <Feed results={resultList} expression={addExpression} />
+      </div>
     </div>
   );
 }
 
 export default App;
-

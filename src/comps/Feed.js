@@ -2,7 +2,7 @@ import React from 'react'
 import './Feed.css'
 
 
-function Feed({results,expression}) {
+function Feed({results}) {
 
 
 
@@ -15,11 +15,11 @@ function Feed({results,expression}) {
             <div className='results'>
                 
                 
-                {results.map((result, i,expression)=> 
+                {results.map((result, i)=> 
                 {
                    return( 
                        <div key={i} className='result'>
-                        <p>{results}</p>
+                        <p>{result.exp}</p>
                        </div>
                    )
                 })}
