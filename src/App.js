@@ -4,7 +4,7 @@ import Button from "./comps/Button";
 import Input from "./comps/Input";
 import Clear from "./comps/Clear";
 import Feed from "./comps/Feed";
-import { uploadCalculations, recieveCalculations, getMarker } from "./firebase";
+import { uploadCalculations, recieveCalculations} from "./firebase";
 
 function App() {
   //state that tracks user button clicks
@@ -21,16 +21,10 @@ function App() {
   //stores epxression as a string before they press =
   const [addExpression, setAddExpression] = useState("");
 
-  //controlling the database from the initial rendering of the app
+  //calling the recieve calculations from the firebase file, telling firebase to order new values in desc order , limit them to 10, give the random generated keys and i , then target the expression value within the object, setting the data to my result list
 
   useEffect(() => {
     recieveCalculations();
-
-    // .then((snapshot) => {
-    //   const data = snapshot.docs.map((doc) => (doc.data().expression));
-    //   setResultList(data);
-
-    // });
 
     const unsubscribe = recieveCalculations()
       .orderBy("created", "desc")
