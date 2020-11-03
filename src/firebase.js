@@ -17,13 +17,19 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 const db = firebaseApp.firestore();
 
-//this function makes it so i dont export db directly, haddles uploading expressions and results
+//this function makes it so i dont export db directly, handles uploading expressions and results
 const uploadCalculations = (expression, results) => {
-  // Add a second document with a generated ID.
+
+    if(expression === ''){
+        return
+    }
+ 
+    // Add a second document with a generated ID.
   db.collection("resultsFeed")
     .add({
-      expression: expression,
+      expression: expression + `= ${results}`,
       results: results,
+      created: new Date()
     })
     .then(function (docRef) {
       console.log("Document written with ID: ", docRef.id);
@@ -34,8 +40,10 @@ const uploadCalculations = (expression, results) => {
 };
 
 //
-const getCalculations = () => {
-    db.collection("resultFeed").get()
-} 
+const recieveCalculations = () => {
+   
+  return db.collection("resultsFeed")
+    
 
-export {uploadCalculations,getCalculations}
+};
+export { uploadCalculations, recieveCalculations };
