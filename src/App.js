@@ -18,7 +18,7 @@ function App() {
   //creates the state for the results that i want to be updated live
   const [resultList, setResultList] = useState([]);
 
-  //stores epxression as a string before they press = 
+  //stores epxression as a string before they press =
   const [addExpression, setAddExpression] = useState("");
 
   //controlling the database from the initial rendering of the app
@@ -32,16 +32,18 @@ function App() {
 
     // });
 
-    
-
-    const unsubscribe = recieveCalculations().orderBy("created", "desc").limit(10).onSnapshot((snap) => {
-      const data = snap.docs.map((doc) => {
-        return {
-        id: doc.id, 
-        exp: doc.data().expression
-      }});
-      setResultList(data);
-    });
+    const unsubscribe = recieveCalculations()
+      .orderBy("created", "desc")
+      .limit(10)
+      .onSnapshot((snap) => {
+        const data = snap.docs.map((doc) => {
+          return {
+            id: doc.id,
+            exp: doc.data().expression,
+          };
+        });
+        setResultList(data);
+      });
 
     //remember to unsubscribe from your realtime listener on unmount or you will create a memory leak
     return () => unsubscribe();
@@ -77,40 +79,35 @@ function App() {
 
   //logic for addition operations
   // set the current input as the previous number so we can have the first value
-  const add = () => {
+  const add = (operation) => {
     const prevState = calcDisplay;
-    setPreviousNumber(prevState);
-    setCalcDisplay("");
-    setOperator("+");
-    setAddExpression(addExpression + "+");
+    createExpression(prevState, operation);
   };
 
   //subtraction logic
-  const subtract = () => {
+  const subtract = (operation) => {
     const prevState = calcDisplay;
-    setPreviousNumber(prevState);
-    setCalcDisplay("");
-    setOperator("-");
-    setAddExpression(addExpression + "-");
+    createExpression(prevState, operation);
   };
   //multiplication logic
-  const multiply = () => {
+  const multiply = (operation) => {
     const prevState = calcDisplay;
-    setPreviousNumber(prevState);
-    setCalcDisplay("");
-    setOperator("*");
-    setAddExpression(addExpression + "*");
+    createExpression(prevState, operation);
   };
 
   //division logic
-  const divide = () => {
+  const divide = (operation) => {
     const prevState = calcDisplay;
-    setPreviousNumber(prevState);
-    setCalcDisplay("");
-    setOperator("/");
-    setAddExpression(addExpression + "/");
+    createExpression(prevState, operation);
   };
 
+  //operation logic
+  const createExpression = (prevState, operation) => {
+    setPreviousNumber(prevState);
+    setCalcDisplay("");
+    setOperator(operation);
+    setAddExpression(addExpression + operation);
+  };
 
   //this method handles the calculations after the operator has been determined
   const calculation = () => {
@@ -120,19 +117,18 @@ function App() {
       value = parseFloat(previousNumber) + parseFloat(curNum);
     }
     if (operator === "-") {
-       value = parseFloat(previousNumber) - parseFloat(curNum);
+      value = parseFloat(previousNumber) - parseFloat(curNum);
     }
     if (operator === "*") {
-     value = parseFloat(previousNumber) * parseFloat(curNum);
+      value = parseFloat(previousNumber) * parseFloat(curNum);
     }
     if (operator === "/") {
       value = parseFloat(previousNumber) / parseFloat(curNum);
-      
     }
-      setCalcDisplay(value);
-      setAddExpression(addExpression);
-      uploadCalculations(addExpression , value);
-      setAddExpression('')
+    setCalcDisplay(value);
+    setAddExpression(addExpression);
+    uploadCalculations(addExpression, value);
+    setAddExpression("");
   };
 
   return (
