@@ -2,7 +2,7 @@
 A live calculator that performs basic operations such as 2+2
 
 # How To Use Sezzle Live Calc
-* Navigate to the hosted website at (url here)
+* Navigate to the hosted website at (https://live-calc.web.app)
 * Once there use your mouse to click on the first value in the expression, 
 * the value will show in the calculator display section above the numbers,
 * Next click on the operation you would like to perform. 
