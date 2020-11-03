@@ -10,7 +10,7 @@ function Feed({results}) {
     return (
         <div className='feed'>
             <div className='result-header'>
-                <h1>Top 10 Results</h1>
+                <h1>Recent Calculations</h1>
             </div>
             <div className='results'>
                 
