@@ -6,6 +6,6 @@ A live calculator that performs basic operations such as 2+2
 * Once there use your mouse to click on the first value in the expression, 
 * the value will show in the calculator display section above the numbers,
 * Next click on the operation you would like to perform. 
-_(NOTE your initial selection will dissapear from the display section, upon selecting your operation , but no need to fear the program is just waiting for your second value)_
-* After Slecting your second value , click on the = button to show the result in the display section , and to have your expression added to the resent results section.
-* After every result you recieve after pressing the = button, please clear your responce before typing in your next expression.
+_(NOTE: Your initial selection will dissapear from the display section, upon selecting your operation , but no need to fear the program is just waiting for your second value)_
+* After Slecting your second value , click on the = button to show the result in the display section , this also adds your expression to the resent results section.
+* _(NOTE: Every time after recieving your results please press the clear button before attemping to calculate another expression)_
