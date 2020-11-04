@@ -9,6 +9,7 @@ function Feed({results}) {
     
     return (
         <div className='feed'>
+
             <div className='result-header'>
                 <h1>Recent Calculations</h1>
             </div>

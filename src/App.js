@@ -4,7 +4,7 @@ import Button from "./comps/Button";
 import Input from "./comps/Input";
 import Clear from "./comps/Clear";
 import Feed from "./comps/Feed";
-import { uploadCalculations, recieveCalculations} from "./firebase";
+import { uploadCalculations, recieveCalculations } from "./firebase";
 
 function App() {
   //state that tracks user button clicks
@@ -127,45 +127,48 @@ function App() {
 
   return (
     <div className="app">
-      <div className="calc-wrapper">
-        <div className="row">
-          {/* The input component displays its children, as the calulator result pad */}
-          {/* So i pass the current state of the input to show users whats being clicked  */}
-          <Input>{calcDisplay}</Input>
-        </div>
-        <div className="row">
-          {/* Add input function just adds the val to the input state */}
-          <Button handleClick={addToCalcDisplay}>7</Button>
-          <Button handleClick={addToCalcDisplay}>8</Button>
-          <Button handleClick={addToCalcDisplay}>9</Button>
-          <Button handleClick={divide}>/</Button>
-        </div>
+      <h1>Sezlle Live Calculator!</h1>
+      <div className="home-wrap">
+        <div className="calc-wrapper">
+          <div className="row">
+            {/* The input component displays its children, as the calulator result pad */}
+            {/* So i pass the current state of the input to show users whats being clicked  */}
+            <Input>{calcDisplay}</Input>
+          </div>
+          <div className="row">
+            {/* Add input function just adds the val to the input state */}
+            <Button handleClick={addToCalcDisplay}>7</Button>
+            <Button handleClick={addToCalcDisplay}>8</Button>
+            <Button handleClick={addToCalcDisplay}>9</Button>
+            <Button handleClick={divide}>/</Button>
+          </div>
 
-        <div className="row">
-          <Button handleClick={addToCalcDisplay}>4</Button>
-          <Button handleClick={addToCalcDisplay}>5</Button>
-          <Button handleClick={addToCalcDisplay}>6</Button>
-          <Button handleClick={multiply}>*</Button>
-        </div>
+          <div className="row">
+            <Button handleClick={addToCalcDisplay}>4</Button>
+            <Button handleClick={addToCalcDisplay}>5</Button>
+            <Button handleClick={addToCalcDisplay}>6</Button>
+            <Button handleClick={multiply}>*</Button>
+          </div>
 
-        <div className="row">
-          <Button handleClick={addToCalcDisplay}>1</Button>
-          <Button handleClick={addToCalcDisplay}>2</Button>
-          <Button handleClick={addToCalcDisplay}>3</Button>
-          <Button handleClick={add}>+</Button>
+          <div className="row">
+            <Button handleClick={addToCalcDisplay}>1</Button>
+            <Button handleClick={addToCalcDisplay}>2</Button>
+            <Button handleClick={addToCalcDisplay}>3</Button>
+            <Button handleClick={add}>+</Button>
+          </div>
+          <div className="row">
+            <Button handleClick={addDecimal}>.</Button>
+            <Button handleClick={addZeroToCalcDisplay}>0</Button>
+            <Button handleClick={calculation}>=</Button>
+            <Button handleClick={subtract}>-</Button>
+          </div>
+          <div className="row">
+            <Clear handleClear={clearCalcDisplay}>Clear</Clear>
+          </div>
         </div>
-        <div className="row">
-          <Button handleClick={addDecimal}>.</Button>
-          <Button handleClick={addZeroToCalcDisplay}>0</Button>
-          <Button handleClick={calculation}>=</Button>
-          <Button handleClick={subtract}>-</Button>
+        <div>
+          <Feed results={resultList} expression={addExpression} />
         </div>
-        <div className="row">
-          <Clear handleClear={clearCalcDisplay}>Clear</Clear>
-        </div>
-      </div>
-      <div>
-        <Feed results={resultList} expression={addExpression} />
       </div>
     </div>
   );

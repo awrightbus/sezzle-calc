@@ -1,10 +1,10 @@
 .feed{
     margin-left: 40px;
     border: 1px solid #888;
-    width: 500px;
     text-align: center;
     background-color: #181818;
     color: white;
+    width: 90%;
 }
 
 .result-header{
