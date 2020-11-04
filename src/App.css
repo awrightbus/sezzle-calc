@@ -2,11 +2,12 @@
   text-align: center;
   height: auto;
   width: 100%;
+  margin: auto;
   margin-top: 100px;
 }
 
 .calc-wrapper{
-  width: 400px;
+  width: 50vw;
   height: 600px;
 }
 
@@ -21,4 +22,16 @@
 .home-wrap{
 display: flex;
 justify-content: center;
+align-items: center;
+margin: auto;
+
+}
+
+
+@media only screen and (max-width: 845px) {
+  .home-wrap{
+    display: block;
+    width: 50vw;
+    margin: auto;
+  }
 }
